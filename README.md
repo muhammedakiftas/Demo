@@ -114,53 +114,6 @@ func (q MyQuery) GreaterThan(threshold int) Query {
 result := MyQuery(Range(1,10)).GreaterThan(5).Results()
 ```
 
-## Generic Functions
-
-Although Go doesn't implement generics, with some reflection tricks, you can use go-linq without
-typing `interface{}`s and type assertions. This will introduce a performance penalty (5x-10x slower)
-but will yield in a cleaner and more readable code.
-
-Methods with `T` suffix (such as `WhereT`) accept functions with generic types. So instead of
-
-    .Select(func(v interface{}) interface{} {...})
-
-you can type:
-
-    .SelectT(func(v YourType) YourOtherType {...})
-
-This will make your code free of `interface{}` and type assertions.
-
-**Example 4: "MapReduce" in a slice of string sentences to list the top 5 most used words using generic functions**
-
-```go
-var results []string
-
-From(sentences).
-	// split sentences to words
-	SelectManyT(func(sentence string) Query {
-		return From(strings.Split(sentence, " "))
-	}).
-	// group the words
-	GroupByT( 
-		func(word string) string { return word },
-		func(word string) string { return word },
-	).
-	// order by count
-	OrderByDescendingT(func(wordGroup Group) int {
-		return len(wordGroup.Group)
-	}).
-	// order by the word
-	ThenByT(func(wordGroup Group) string {
-		return wordGroup.Key.(string)
-	}).
-	Take(5).  // take the top 5
-	// project the words using the index as rank
-	SelectIndexedT(func(index int, wordGroup Group) string {
-		return fmt.Sprintf("Rank: #%d, Word: %s, Counts: %d", index+1, wordGroup.Key, len(wordGroup.Group))
-	}).
-	ToSlice(&results)
-```
-
 **More examples** can be found in the [documentation](https://godoc.org/github.com/ahmetb/go-linq).
 
 ## Release Notes
