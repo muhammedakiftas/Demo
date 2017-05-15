@@ -1,4 +1,4 @@
-# Google Cloud Translate | Android [![GoDoc](https://godoc.org/github.com/ahmetb/go-linq?status.svg)](https://godoc.org/github.com/ahmetb/go-linq) [![Build Status](https://travis-ci.org/ahmetb/go-linq.svg?branch=master)](https://travis-ci.org/ahmetb/go-linq) [![Coverage Status](https://coveralls.io/repos/github/ahmetb/go-linq/badge.svg?branch=master)](https://coveralls.io/github/ahmetb/go-linq?branch=master)
+# Google Cloud Translate | Android [![Build Status](https://travis-ci.org/ahmetb/go-linq.svg?branch=master)](https://github.com/GoogleCloudPlatform/google-cloud-java/tree/master/google-cloud-translate)
 Google Cloud Translate with Word Translation on Android.
 * There is Dependencies and Code !
 
