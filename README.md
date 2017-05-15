@@ -1,4 +1,4 @@
-# go-linq [![GoDoc](https://godoc.org/github.com/ahmetb/go-linq?status.svg)](https://godoc.org/github.com/ahmetb/go-linq) [![Build Status](https://travis-ci.org/ahmetb/go-linq.svg?branch=master)](https://travis-ci.org/ahmetb/go-linq) [![Coverage Status](https://coveralls.io/repos/github/ahmetb/go-linq/badge.svg?branch=master)](https://coveralls.io/github/ahmetb/go-linq?branch=master)
+# Google Cloud Translate | Android [![GoDoc](https://godoc.org/github.com/ahmetb/go-linq?status.svg)](https://godoc.org/github.com/ahmetb/go-linq) [![Build Status](https://travis-ci.org/ahmetb/go-linq.svg?branch=master)](https://travis-ci.org/ahmetb/go-linq) [![Coverage Status](https://coveralls.io/repos/github/ahmetb/go-linq/badge.svg?branch=master)](https://coveralls.io/github/ahmetb/go-linq?branch=master)
 A powerful language integrated query (LINQ) library for Go.
 * Written in vanilla Go, no dependencies!
 * Complete lazy evaluation with iterator pattern
@@ -6,7 +6,7 @@ A powerful language integrated query (LINQ) library for Go.
 * Supports generic functions to make your code cleaner and free of type assertions
 * Supports arrays, slices, maps, strings, channels and custom collections
 
-## Quickstart
+## Usage
 
 Usage is as easy as chaining methods like:
 
@@ -15,37 +15,41 @@ Usage is as easy as chaining methods like:
 **Example 1: Find all owners of cars manufactured after 2015**
 
 ```go
-import . "github.com/ahmetb/go-linq"
-	
-type Car struct {
-    year int
-    owner, model string
+multiDexEnabled true
+
+...
+
+configurations.all {
+    resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+}
+
+...
+
+packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/io.netty.versions.properties'
+        exclude 'META-INF/INDEX.LIST'
 }
 
 ...
 
 
-var owners []string
+    compile ('com.google.apis:google-api-services-translate:v2-rev47-1.22.0') {
+        exclude group: 'com.google.guava'
+        exclude module: 'httpclient' //by artifact name
+    }
+    compile ('com.google.cloud:google-cloud-translate:0.5.0') {
+        exclude group: 'io.grpc', module: 'grpc-all'
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+        exclude group: 'com.google.api-client', module: 'google-api-client-appengine'
+        exclude module: 'httpclient' //by artifact name
+        exclude group: 'org.json', module: 'json'
+    }
 
-From(cars).Where(func(c interface{}) bool {
-	return c.(Car).year >= 2015
-}).Select(func(c interface{}) interface{} {
-	return c.(Car).owner
-}).ToSlice(&owners)
 ```
 
 Or, you can use generic functions, like `WhereT` and `SelectT` to simplify your code
 (at a performance penalty):
-
-```go
-var owners []string
-
-From(cars).WhereT(func(c Car) bool {
-	return c.year >= 2015
-}).SelectT(func(c Car) string {
-	return c.owner
-}).ToSlice(&owners)	
-```
 
 **Example 2: Find the author who has written the most books**
 
